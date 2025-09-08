@@ -5,7 +5,7 @@ public class VoteOption {
     private int order;
     private String caption;
 
-    public VoteOption() { }
+    public VoteOption() {}
 
     public VoteOption(int order, String caption) {
         this.order = order; this.caption = caption;

@@ -9,7 +9,7 @@ public class User {
     private String email;
     private List<Poll> createdPolls;
 
-    public User() { }
+    public User() {}
 
     public User(String username, String email) {
         this.username = username;

@@ -10,7 +10,7 @@ public class Poll {
     private User creator;
     private Instant closesAt;
 
-    public Poll() { }
+    public Poll() {}
 
     public Poll(String question, Set<VoteOption> options, User creator) {
         this.question = question;

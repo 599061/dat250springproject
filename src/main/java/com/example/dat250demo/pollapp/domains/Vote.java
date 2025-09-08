@@ -8,7 +8,7 @@ public class Vote {
     private int optionOrder;
     private Instant publishedAt;
 
-    public Vote() { }
+    public Vote() {}
 
     public Vote(String username, int optionOrder, Instant publishedAt) {
         this.username = username; this.optionOrder = optionOrder; this.publishedAt = publishedAt;

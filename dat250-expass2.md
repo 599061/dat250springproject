@@ -1,6 +1,7 @@
 # Software Technology Experiment 2
 The goal of this assignment was to implement a simple REST API for 
 Poll app using Spring Boot based on a given domain model and simple instructions.
+- [Git Repo](https://github.com/599061/dat250springproject.git)
 
 ### What was done
 - Created Dat250DemoTest.http to cover the test scenarios listen in the assignment.

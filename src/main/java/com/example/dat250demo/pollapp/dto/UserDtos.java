@@ -1,0 +1,9 @@
+package com.example.dat250demo.pollapp.dto;
+
+import jakarta.validation.constraints.*;
+
+public class UserDtos {
+    public record Create(@NotBlank String username, @Email @NotBlank String email) {}
+    public record Update(@Email @NotBlank String email) {}
+    public record View(String username, String email) {}
+}

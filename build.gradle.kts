@@ -21,7 +21,9 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("com.google.guava:guava:33.4.8-jre")
 }
 
 tasks.withType<Test> {

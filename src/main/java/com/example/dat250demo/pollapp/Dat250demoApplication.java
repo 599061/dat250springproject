@@ -1,4 +1,4 @@
-package com.example.dat250demo;
+package com.example.dat250demo.pollapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

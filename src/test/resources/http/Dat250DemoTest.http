@@ -1,0 +1,168 @@
+@host = http://localhost:8080
+@user1 = User01
+@user2 = User02
+
+### 1 - Create a new user (User01)
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+  "username": "{{user1}}",
+  "email": "user01@mail.com"
+}
+
+> {%
+    // Accept 201 (brand new) or 409 (already exists from a previous run)
+    client.test("Create User01 -> 201 or 409", () => {
+        client.assert([201,409].includes(response.status),
+            "Expected 201 or 409, got " + response.status);
+    });
+%}
+
+### 2 - List all users
+#  (should include the newly created user; we just check size >= 1)
+GET {{host}}/api/users
+
+> {%
+    client.test("Users list has at least 1 entry", () => {
+        const arr = response.body;
+        client.assert(Array.isArray(arr), "Response is not an array");
+        client.assert(arr.length >= 1, "Expected at least one user");
+    });
+%}
+
+### 3 - Create another user (User02)
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+  "username": "{{user2}}",
+  "email": "user02@mail.com"
+}
+
+> {%
+    client.test("Create User02 -> 201 or 409", () => {
+        client.assert([201,409].includes(response.status),
+            "Expected 201 or 409, got " + response.status);
+    });
+%}
+
+### 4 - List all users again
+# (should show two users)
+GET {{host}}/api/users
+
+> {%
+    client.test("Users list has at least 2 entries", () => {
+        const arr = response.body;
+        client.assert(Array.isArray(arr), "Response is not an array");
+        client.assert(arr.length >= 2, "Expected at least two users");
+    });
+%}
+
+### 5 - User1 creates a new poll
+POST {{host}}/api/polls
+Content-Type: application/json
+
+{
+  "question": "What's your favorite color?",
+  "closesAt": "2030-01-01T12:00:00Z",
+  "creatorUsername": "{{user1}}",
+  "options": [
+    { "order": 1, "caption": "Blue" },
+    { "order": 2, "caption": "Red" }
+  ]
+}
+
+> {%
+    client.test("Create poll -> 201", () => client.assert(response.status === 201));
+
+    // Capture pollId from body.id or from Location header
+    let id = undefined;
+    try {
+        if (response.body && typeof response.body === 'object') {
+            id = response.body.id ?? response.body["id"];
+        }
+    } catch (e) { /* ignore */ }
+
+    if (!id) {
+        const headers = response.headers;
+        const loc = (headers.valueOf && headers.valueOf("Location"))
+            || headers["Location"] || headers["location"];
+        if (loc) {
+            const m = /\/api\/polls\/(\d+)/.exec(loc);
+            if (m) id = m[1];
+        }
+    }
+
+    client.log("captured pollId = " + id);
+    client.test("pollId captured", () => client.assert(!!id, "Could not capture pollId from response"));
+    if (id) client.global.set("pollId", String(id));
+%}
+
+### 6 - List polls
+# (shows the new poll)
+GET {{host}}/api/polls
+
+> {%
+    client.test("Polls list contains our question", () => {
+        const arr = response.body;
+        client.assert(Array.isArray(arr), "Response is not an array");
+        const found = arr.some(p => p.question === "What's your favorite color?");
+        client.assert(found, "Created poll not found in list");
+    });
+%}
+
+### 7 - User 2 votes on the poll
+# (Blue = order 1)
+POST {{host}}/api/polls/{{pollId}}/votes
+Content-Type: application/json
+
+{
+  "username": "{{user2}}",
+  "optionOrder": 1
+}
+
+> {%
+    client.test("Vote cast -> 200", () => client.assert(response.status === 200));
+%}
+
+### 8 - User 2 changes the vote
+# (Red = order 2)
+POST {{host}}/api/polls/{{pollId}}/votes
+Content-Type: application/json
+
+{
+  "username": "{{user2}}",
+  "optionOrder": 2
+}
+
+> {%
+    client.test("Vote changed -> 200", () => client.assert(response.status === 200));
+%}
+
+### 9 - List votes
+# (shows the most recent vote for User 2)
+GET {{host}}/api/polls/{{pollId}}/votes?username={{user2}}
+
+> {%
+    client.test("Current vote is order=2 (Red)", () => {
+        client.assert(response.status === 200, "Expected 200");
+        client.assert(response.body.optionOrder === 2,
+            "Expected optionOrder 2, got " + response.body.optionOrder);
+    });
+%}
+
+### 10 - Delete the one poll
+DELETE {{host}}/api/polls/{{pollId}}
+
+> {%
+    client.test("Delete poll -> 204", () => client.assert(response.status === 204));
+%}
+
+### 11 - List empty votes
+# (empty / not found since poll is gone)
+GET {{host}}/api/polls/{{pollId}}/votes?username={{user2}}
+
+> {%
+    client.test("Votes gone -> 404", () => client.assert(response.status === 404));
+%}

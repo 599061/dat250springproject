@@ -9,7 +9,7 @@ develop a frontend SPA for the project from the previous experiment.
 ### What was done
 - Created `.svelte` components `CreatePoll`, `PollVote`, 
 `CreateUser`, and edited `App.svelte` to work with these components.
-- Edited *api.js* to fetch CRUD from backend.
+- Edited `api.js` to fetch CRUD from backend.
 - Changed to relative paths in `api.js` before using `npm run build`.
 
 ### Pending

@@ -16,7 +16,7 @@
         saving = true; error = '';
         try {
             const user = await createUser(username.trim(), email.trim());
-            onCreated({ user });            // callback prop
+            onCreated({ user });
             username = ''; email = '';
         } catch (e) {
             error = e.message;

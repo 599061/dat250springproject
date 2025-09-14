@@ -14,7 +14,6 @@
         if (selectedId && !polls.some(p => p.id === selectedId)) selectedId = null;
     }
 
-    // run once after mount
     $effect.root(() => {
         refreshUsers();
         refreshPolls();
@@ -24,7 +23,6 @@
 <main>
     <h1>PollApp</h1>
 
-    <!-- pass callbacks (not DOM events) -->
     <CreateUser onCreated={refreshUsers} />
     <CreatePoll {users} onCreated={({ id }) => { selectedId = id; refreshPolls(); }} />
 

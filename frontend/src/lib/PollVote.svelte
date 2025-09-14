@@ -15,7 +15,7 @@
         try {
             poll    = await getPoll(id);
             results = await getResults(id);
-            try { currentVote = await getUsersVote(id, voter); } catch { currentVote = null; }
+             currentVote = voter.trim() ? await getUsersVote(id, voter.trim()) : null;
         } catch (e) {
             error = e.message;
         } finally {
@@ -23,8 +23,12 @@
         }
     }
 
-    // re-run whenever pollId or voter changes
     $effect(() => { if (pollId) loadAll(pollId); });
+
+    async function refreshVote() {
+        if (!pollId || !voter.trim()) { currentVote = null; return; }
+        currentVote = await getUsersVote(pollId, voter.trim());
+    }
 
     async function vote(order) {
         await castVote(pollId, voter, order);
@@ -56,7 +60,7 @@
 
         <div class="voter">
             <label>Voter username
-                <input bind:value={voter} onchange={() => loadAll(pollId)} />
+                <input bind:value={voter} onchange={refreshVote} placeholder="username" />
             </label>
             {#if currentVote}
                 <small>Current vote: option <b>{currentVote.optionOrder}</b></small>

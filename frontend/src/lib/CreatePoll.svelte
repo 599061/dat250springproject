@@ -1,10 +1,8 @@
 <script>
     import { createPoll } from './api.js';
 
-    // props
     let { users = [], onCreated = () => {} } = $props();
 
-    // state
     let question        = $state('');
     let closesAtLocal   = $state('');
     let creatorUsername = $state('');
@@ -15,7 +13,6 @@
     let saving = $state(false);
     let error  = $state('');
 
-    // when users change, ensure a default creator is selected
     $effect(() => {
         if (!creatorUsername && users.length) {
             creatorUsername = users[0].username;
@@ -49,8 +46,7 @@
                     .filter(o => o.caption)
             };
             const view = await createPoll(payload);
-            onCreated({ id: view.id, poll: view });      // callback prop
-            // reset
+            onCreated({ id: view.id, poll: view });
             question = ''; closesAtLocal = '';
             options = [{ order: 1, caption: '' }, { order: 2, caption: '' }];
         } catch (e) {

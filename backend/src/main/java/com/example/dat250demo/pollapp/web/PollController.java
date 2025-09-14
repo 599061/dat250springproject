@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/polls")
 public class PollController {
 

@@ -10,10 +10,12 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/users")
 public class UserController {
 
     private final PollManager mgr;
+
     public UserController(PollManager mgr) { this.mgr = mgr; }
 
     @GetMapping

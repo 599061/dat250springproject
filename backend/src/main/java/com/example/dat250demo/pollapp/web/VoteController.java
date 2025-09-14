@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/polls/{pollId}/votes")
 public class VoteController {
 

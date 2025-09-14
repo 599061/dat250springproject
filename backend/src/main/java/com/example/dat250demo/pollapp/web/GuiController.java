@@ -1,11 +1,13 @@
-package com.example.dat250demo.pollapp;
+package com.example.dat250demo.pollapp.web;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@CrossOrigin
 public class GuiController {
 
     @GetMapping("/gui")

@@ -8,13 +8,14 @@ import java.util.List;
 @Entity
 @Table(name = "polls")
 public class Poll {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String question;
 
-    private Instant closesAt; // not used by test, fine to keep
+    private Instant closesAt;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_id")
@@ -34,9 +35,6 @@ public class Poll {
         this.createdBy = createdBy;
     }
 
-    /**
-     * Adds a new option; first option gets presentationOrder=0, then 1, …
-     */
     public VoteOption addVoteOption(String caption) {
         int order = options.size();
         VoteOption vo = new VoteOption(order, caption, this);
@@ -44,7 +42,6 @@ public class Poll {
         return vo;
     }
 
-    // getters/setters
     public Long getId() { return id; }
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }

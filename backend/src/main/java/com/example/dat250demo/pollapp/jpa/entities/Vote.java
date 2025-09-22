@@ -6,10 +6,10 @@ import java.time.Instant;
 @Entity
 @Table(name = "votes")
 public class Vote {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // JPQL in the test: v.votesOn -> VoteOption
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id")
     private VoteOption votesOn;
@@ -33,7 +33,6 @@ public class Vote {
         this.poll = option.getPoll();
     }
 
-    // getters/setters
     public Long getId() { return id; }
     public VoteOption getVotesOn() { return votesOn; }
     public void setVotesOn(VoteOption votesOn) { this.votesOn = votesOn; }

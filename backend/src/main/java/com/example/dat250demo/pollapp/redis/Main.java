@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) {
         try (UnifiedJedis jedis = new UnifiedJedis("redis://localhost:6379")) {
 
-            // Logged-in users as a Set
             String keyLoggedIn = "logged-in-users";
             jedis.del(keyLoggedIn);
             jedis.sadd(keyLoggedIn, "alice");
@@ -18,7 +17,6 @@ public class Main {
             jedis.sadd(keyLoggedIn, "Jerry");
             System.out.println("Logged in: " + jedis.smembers(keyLoggedIn));
 
-            // Poll model
             String pollId = "03ebcb7b-bd69-440b-924e-f5b7d664af7b";
             String metaKey = "poll:" + pollId + ":meta";
             String optionsKey = "poll:" + pollId + ":options";
@@ -32,7 +30,6 @@ public class Main {
             ));
             jedis.hset(votesKey, Map.of("0", "269", "1", "268", "2", "42"));
 
-            // Increment vote for option 1
             long newCount = jedis.hincrBy(votesKey, "1", 1);
             System.out.println("Option 1 new count = " + newCount);
 

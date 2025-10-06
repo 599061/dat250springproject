@@ -19,7 +19,7 @@ dependencies {
     implementation("org.hibernate.orm:hibernate-core:7.1.1.Final")
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
     runtimeOnly("com.h2database:h2:2.3.232")
-
+    implementation("redis.clients:jedis:6.2.0")
     testImplementation(platform("org.junit:junit-bom:5.11.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

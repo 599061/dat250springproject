@@ -18,11 +18,13 @@ public class VoteOption {
     @Column(nullable = false)
     private String caption;
 
+    private int voteCount;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "poll_id")
     private Poll poll;
 
-    protected VoteOption() {}
+    public VoteOption() {}
 
     public VoteOption(int presentationOrder, String caption, Poll poll) {
         this.presentationOrder = presentationOrder;
@@ -35,6 +37,8 @@ public class VoteOption {
     public void setPresentationOrder(int presentationOrder) { this.presentationOrder = presentationOrder; }
     public String getCaption() { return caption; }
     public void setCaption(String caption) { this.caption = caption; }
+    public int getVoteCount() { return voteCount; }
+    public void setVoteCount(int voteCount) { this.voteCount = voteCount; }
     public Poll getPoll() { return poll; }
     public void setPoll(Poll poll) { this.poll = poll; }
 }

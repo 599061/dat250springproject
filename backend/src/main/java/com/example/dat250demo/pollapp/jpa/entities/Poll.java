@@ -28,7 +28,7 @@ public class Poll {
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();
 
-    protected Poll() {}
+    public Poll() {}
 
     public Poll(String question, User createdBy) {
         this.question = question;
@@ -42,6 +42,13 @@ public class Poll {
         return vo;
     }
 
+    public void incrementOptionCount(String optionIdOrText) {
+        options.stream()
+                .filter(o -> String.valueOf(o.getId()).equals(optionIdOrText) || o.getCaption().equals(optionIdOrText))
+                .findFirst()
+                .ifPresent(o -> o.setVoteCount(o.getVoteCount() + 1));
+    }
+
     public Long getId() { return id; }
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }
@@ -50,5 +57,6 @@ public class Poll {
     public User getCreatedBy() { return createdBy; }
     public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
     public List<VoteOption> getOptions() { return options; }
+    public void setOptions(List<VoteOption> options) { this.options = options; }
     public List<Vote> getVotes() { return votes; }
 }
